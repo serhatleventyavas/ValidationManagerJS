@@ -50,8 +50,8 @@ function findCountryByAlpha3(code) {
 function validPhoneNumberWithCountry(country, phoneNumber) {
     phoneNumber = phoneNumber.trim().split(' ').join('');
     const countryCode = country.country_code || "";
-    const mobileBeginWithArray = country.mobile_begin_with ?? [];
-    const phoneNumberLengthsArray = country.phone_number_lengths ?? [];
+    const mobileBeginWithArray = country.mobile_begin_with || [];
+    const phoneNumberLengthsArray = country.phone_number_lengths || [];
 
     for (let outerIndex = 0; outerIndex < mobileBeginWithArray.length; outerIndex++) {
         const mobileBegin = mobileBeginWithArray[outerIndex];
