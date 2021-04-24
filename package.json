@@ -1,5 +1,5 @@
 {
-  "name": "ValidationManagerJS",
+  "name": "validation-manager-js",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -11,8 +11,12 @@
     "url": "git+https://github.com/serhatleventyavas/ValidationManagerJS.git"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": {
+      "name": "Serhat Levent Yavaş",
+      "email": "serhatleventyavas@gmail.com",
+      "url": "https://github.com/serhatleventyavas"
+  },
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/serhatleventyavas/ValidationManagerJS/issues"
   },
