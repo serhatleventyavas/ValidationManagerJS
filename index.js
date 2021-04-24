@@ -1,5 +1,5 @@
 const fs = require('fs');
-
+const path = require('path');
 function generateRegexPattern(countryCode, mobileBeginWith, phoneNumberLenght) {
     const numberOfParentheses = 2;
     const countryCodeLength = countryCode.length;
@@ -11,7 +11,7 @@ function generateRegexPattern(countryCode, mobileBeginWith, phoneNumberLenght) {
 
 function getCountryList() {
     try {
-        const countriesAsRaw = fs.readFileSync('country.json');
+        const countriesAsRaw = fs.readFileSync(__dirname + '/country.json');
         const countriesAsJson = JSON.parse(countriesAsRaw);
         return countriesAsJson;
     } catch(err) {
