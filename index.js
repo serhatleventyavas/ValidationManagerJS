@@ -20,6 +20,15 @@ function getCountryList() {
     }
 }
 
+function findCountryByCountryCode(code) {
+    const countries = getCountryList() || [];
+    const filterResult = countries.filter(row => row.country_code === code);
+    if (filterResult.length > 0) {
+        return filterResult[0];
+    }
+    return undefined;
+}
+
 function findCountryByAlpha2(code) {
     const countries = getCountryList() || [];
     const filterResult = countries.filter(row => row.alpha2 === code);
@@ -29,7 +38,16 @@ function findCountryByAlpha2(code) {
     return undefined;
 }
 
-function validPhoneNumber(country, phoneNumber) {
+function findCountryByAlpha3(code) {
+    const countries = getCountryList() || [];
+    const filterResult = countries.filter(row => row.alpha3 === code);
+    if (filterResult.length > 0) {
+        return filterResult[0];
+    }
+    return undefined;
+}
+
+function validPhoneNumberWithCountry(country, phoneNumber) {
     phoneNumber = phoneNumber.trim().split(' ').join('');
     const countryCode = country.country_code || "";
     const mobileBeginWithArray = country.mobile_begin_with ?? [];
@@ -49,7 +67,48 @@ function validPhoneNumber(country, phoneNumber) {
     return false;
 }
 
+function guessCountryWithPhoneNumber(phoneNumber) {
+    phoneNumber = phoneNumber
+        .trim()
+        .replace('+', '')
+        .replace('(', '')
+        .replace(")", "")
+        .split(' ').join('');
+    const availableCountryCode = phoneNumber.substring(0, 3);
+
+    const availableCountries = [];
+    let guessCountryCode = "";
+    for(let index = 0; index < availableCountryCode.length; index++) {
+        const character = availableCountryCode[index];
+        guessCountryCode = guessCountryCode.concat(character);
+        const tempCountriesResult = findCountryByCountryCode(guessCountryCode) || undefined;
+        if (tempCountriesResult) {
+            availableCountries.push(tempCountriesResult);
+        }
+    }
+    return availableCountries;
+}
+
+function validPhoneNumber(phoneNumber) {
+    const countries = guessCountryWithPhoneNumber(phoneNumber) || [];
+    if (countries.length > 0) {
+
+        for (let index = 0; index < countries.length; index++) {
+            const country = countries[index];
+            if (validPhoneNumberWithCountry(country, phoneNumber)) {
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 module.exports = {
+    findCountryByAlpha2: findCountryByAlpha2,
+    findCountryByAlpha3: findCountryByAlpha3,
     validPhoneNumber: validPhoneNumber,
-    findCountryByAlpha2: findCountryByAlpha2
+    validPhoneNumberWithCountry: validPhoneNumberWithCountry,
+    guessCountryWithPhoneNumber: guessCountryWithPhoneNumber,
+    findCountryByCountryCode: findCountryByCountryCode
 }
