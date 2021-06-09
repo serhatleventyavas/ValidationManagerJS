@@ -1,5 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+const countriesRaw = require('./countries');
+
 function generateRegexPattern(countryCode, mobileBeginWith, phoneNumberLenght) {
     const numberOfParentheses = 2;
     const countryCodeLength = countryCode.length;
@@ -9,19 +9,8 @@ function generateRegexPattern(countryCode, mobileBeginWith, phoneNumberLenght) {
     return `^\\+\\(${countryCode}\\)${mobileBeginWith}([0-9()+]){${remaining}}$`;
 }
 
-function getCountryList() {
-    try {
-        const countriesAsRaw = fs.readFileSync(__dirname + '/country.json');
-        const countriesAsJson = JSON.parse(countriesAsRaw);
-        return countriesAsJson;
-    } catch(err) {
-        console.log(err);
-        return [];
-    }
-}
-
 function findCountryByCountryCode(code) {
-    const countries = getCountryList() || [];
+    const countries = countriesRaw.countries || [];
     const filterResult = countries.filter(row => row.country_code === code);
     if (filterResult.length > 0) {
         return filterResult[0];
@@ -30,7 +19,7 @@ function findCountryByCountryCode(code) {
 }
 
 function findCountryByAlpha2(code) {
-    const countries = getCountryList() || [];
+    const countries = countriesRaw.countries || [];
     const filterResult = countries.filter(row => row.alpha2 === code);
     if (filterResult.length > 0) {
         return filterResult[0];
@@ -39,7 +28,7 @@ function findCountryByAlpha2(code) {
 }
 
 function findCountryByAlpha3(code) {
-    const countries = getCountryList() || [];
+    const countries = countriesRaw.countries || [];
     const filterResult = countries.filter(row => row.alpha3 === code);
     if (filterResult.length > 0) {
         return filterResult[0];
